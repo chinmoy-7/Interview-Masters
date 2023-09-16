@@ -5,10 +5,12 @@ import { DataGrid } from '@mui/x-data-grid'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { contactContext } from '../context/ContactContextProvider'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ContactTable() {
   const context = useContext(contactContext);
-  const {getContact,contact,setContact,editDialogOpen,setEditDialogOpen,editedData,setEditedData,rows,setRows,handleDelete}=context
+  const {getContact,contact,setContact,editDialogOpen,setEditDialogOpen,editedData,setEditedData,rows,setRows,handleDelete,notify}=context
 
 
   useEffect(()=>{
@@ -52,6 +54,10 @@ function ContactTable() {
   };
 
   const handleEditSave = async() => {
+    if(editedData.name==""||editedData.email==""||editedData.phone==""||editedData.spoc==""){
+      notify("Please fill all the fields");
+      return
+    }
     const res=await axios.put(`http://localhost:4000/api/contacts/${editedData._id}`,editedData);
     getContact();
     handleEditDialogClose();
@@ -59,6 +65,9 @@ function ContactTable() {
 
   return (
     <Box height={"90vh"} width={"100vw"} >
+      <ToastContainer
+        autoClose={2000}
+      />
       <DataGrid
         columns={columns}
         rows={rows}

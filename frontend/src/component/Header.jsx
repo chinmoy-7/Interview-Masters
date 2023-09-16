@@ -6,14 +6,19 @@ import { generatePDF } from './PDFgen';
 import { contactContext } from '../context/ContactContextProvider';
 function Header() {
   const context = useContext(contactContext)
-  const {getContact,rows,setRows,handleDelete,contact}=context;
+  const {getContact,rows,setRows,handleDelete,contact,notify}=context;
   const [insertDialogOpen, setInsertDialogOpen] = useState(false);
-  const [insertData, setInsertData] = useState({});
+  const [insertData, setInsertData] = useState({name:"",email:"",phone:"",spoc:""});
   const handleInsertDialogClose = () => {
     setInsertDialogOpen(false);
     setInsertData({});
   };
   const handleInsert=async()=>{
+    console.log(insertData)
+    if(insertData.name==""||insertData.email==""||insertData.phone==""||insertData.spoc==""){
+      notify("Please fill all the fields");
+      return
+    }
     await axios.post("http://localhost:4000/api/contacts",insertData);
     getContact();
     
