@@ -1,4 +1,4 @@
-const { insertData,getContacts,getContactById,updates,del } = require("../Services/contactServices");
+const { insertData,getContacts,getContactById,updates,del,search } = require("../Services/contactServices");
 
 const insertContact = async(req,res)=>{
     try {
@@ -44,12 +44,23 @@ const updateContact = async(req,res)=>{
 
 const deleteContact=async(req,res)=>{
     try {
-        const {id}=req.params
+        let {id}=req.params
+        id = id.split(",");
         const deleted = await del(id);
         res.send(deleted);
     } catch (error) {
         throw new Error(error.message);
     }
+}   
+
+const searchContact = async(req,res)=>{
+    try {
+        const {name} = req.params
+        const result=await search(name);
+        res.send(result);
+    } catch (error) {
+        throw new Error(error.message)
+    }
 }
 
-module.exports={insertContact,getContact,getContactId,updateContact,deleteContact}
+module.exports={insertContact,getContact,getContactId,updateContact,deleteContact,searchContact}

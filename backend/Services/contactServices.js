@@ -1,9 +1,13 @@
 const contact = require("../Models/contacts");
 
 const insertData = async(data)=>{
-    data.created=new Date();
+    try{
+        data.created=new Date();
     const res=await contact.create(data);
     return res;
+    }catch(e){
+        throw new Error(e.message)
+    }
 }
 
 const getContacts = async()=>{
@@ -32,11 +36,21 @@ const updates=async(id,data)=>{
 
 const del=async(id)=>{
     try {
-        const res = await contact.deleteOne({_id:id});
+        const res = await contact.deleteMany({_id:{$in:id}});
         return res;
     } catch (error) {
         throw new Error(error.message)
     }
 }
 
-module.exports = {insertData,getContacts,getContactById,updates,del};
+const search=async(name)=>{
+    try {
+        const reg = new RegExp(`^${name}`,'i')
+        const res=await contact.find({name:reg}).limit(10);
+        return res;
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+module.exports = {insertData,getContacts,getContactById,updates,del,search};
