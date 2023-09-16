@@ -11,7 +11,6 @@ function Header() {
   const [insertData, setInsertData] = useState({name:"",email:"",phone:"",spoc:""});
   const handleInsertDialogClose = () => {
     setInsertDialogOpen(false);
-    setInsertData({});
   };
   const handleInsert=async()=>{
     console.log(insertData)
@@ -21,7 +20,7 @@ function Header() {
     }
     await axios.post("http://localhost:4000/api/contacts",insertData);
     getContact();
-    
+    setInsertData({name:"",email:"",phone:"",spoc:""})
     handleInsertDialogClose()
     
   }
