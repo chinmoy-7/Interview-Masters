@@ -17,6 +17,7 @@ const ContactContextProvider = ({children})=>{
         setRows(res.data)
       }
       const handleDelete=async(row)=>{
+        if(row.length==0) return
         console.log(row)
         let arr = rows.filter(item=>{
             console.log(item)
